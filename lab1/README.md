@@ -3,7 +3,7 @@
 
 ### Tasks:
 1. [x] Define at least 5 types of tourists that visit Luna-City. Draw the Goal Tree representing these types of tourists.
-2. [ ] Implement the rules from the defined tree in Task 1 in your code (use the IF, AND, OR and THEN rules which are already implemented).
+2. [x] Implement the rules from the defined tree in Task 1 in your code (use the IF, AND, OR and THEN rules which are already implemented).
 3. [ ] If you are using the provided code, check how the Forward Chaining algorithm works and illustrate an example. If you are implementing your own code, implement the Forward Chaining algorithm yourself.
 4. [ ] Implement the Backward Chaining algorithm for the Goal Tree.
 5. [ ] Implement a system for generating questions from the Goal Tree. Have at least 3 types of questions (e.g. yes/no, multiple choice, etc).
