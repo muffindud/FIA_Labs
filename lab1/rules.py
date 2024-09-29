@@ -32,10 +32,9 @@ TOURIST_RULES = (
         )
     ),
     IF( #R4
-        
         OR(
             '(?x) is self-important',
-            '(?x) is inconsiderate',
+            '(?x) is inconsiderate'
         ),
         THEN(
             '(?x) is a mouth-breather'

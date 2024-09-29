@@ -32,14 +32,59 @@ def forward_chain(rules, data, apply_only_one=False, verbose=False):
     return data
 
 
-def backward_chain(rules, hypothesis, verbose=False):
-    """
-    Outputs the goal tree from having rules and hyphothesis, works like an "encyclopedia"
-    """
+def backward_chain(rules, hypothesis, known_facts=None, verbose=False):
+    # If the known facts are not provided, we assume there are none
+    if known_facts is None:
+        known_facts = set()
 
-    # TODO: you should implement backward_chain algorithm here
+    # If the hypothesis is already a known fact, we don't need to prove it
+    if hypothesis in known_facts:
+        return PASS
+    
+    goal_tree = []
 
-    return "TODO: implement backward_chain" #change return
+    # Try to match the hypothesis with the consequents of the rules
+    for rule in rules:
+        for consequent in rule.consequent():
+            bindings = match(consequent, hypothesis)
+            
+            if bindings is not None:
+                if verbose:
+                    print(f"Trying to prove: {hypothesis} using rule: {rule}")
+                
+                # Get the rule's antecedents
+                antecedent = populate(rule.antecedent(), bindings)
+
+                # If the antecedent is a single condition, we need to prove it
+                if isinstance(antecedent, str):
+                    if verbose:
+                        print(f"Attempting to prove intermediate fact: {antecedent}")
+                    
+                    # Recursively try to prove the antecedent
+                    result = backward_chain(rules, antecedent, known_facts, verbose)
+                    goal_tree.append(result)
+                
+                # If it's a conjunction (AND), we recursively try to prove each part
+                elif isinstance(antecedent, AND):
+                    sub_goals = []
+                    for sub_condition in antecedent:
+                        sub_goal = backward_chain(rules, sub_condition, known_facts, verbose)
+                        sub_goals.append(sub_goal)
+                    goal_tree.append(AND(*sub_goals))
+                
+                # If it's a disjunction (OR), at least one condition must be provable
+                elif isinstance(antecedent, OR):
+                    sub_goals = []
+                    for sub_condition in antecedent:
+                        sub_goal = backward_chain(rules, sub_condition, known_facts, verbose)
+                        sub_goals.append(sub_goal)
+                    goal_tree.append(OR(*sub_goals))
+
+                # Simplify the goal tree after proving the rule
+                return simplify(AND(*goal_tree))
+
+    # If no rules apply, return the hypothesis as a goal itself (it's an unmet goal)
+    return hypothesis
 
 
 def instantiate(template, values_dict):

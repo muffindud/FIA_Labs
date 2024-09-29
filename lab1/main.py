@@ -10,11 +10,22 @@ TEST_DATA = (
     'John is rude'
 )
 
+HYPOTHESIS = 'John is a vlogger'
+
 
 def main():
     result = forward_chain(TOURIST_RULES, TEST_DATA, verbose=False)
     for item in result:
         if item not in TEST_DATA:
+            print(item)
+
+    print()
+
+    result = backward_chain(TOURIST_RULES, HYPOTHESIS, verbose=False)
+    for item in result:
+        if type(item) != str:
+            print(list(item))
+        else:
             print(item)
 
 
