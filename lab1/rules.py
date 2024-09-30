@@ -28,11 +28,11 @@ TOURIST_RULES = (
             '(?x) tackles others'
         ),
         THEN(
-            '(?x) is incosiderate'
+            '(?x) is inconsiderate'
         )
     ),
     IF( #R4
-        OR(
+        AND(
             '(?x) is self-important',
             '(?x) is inconsiderate'
         ),
@@ -53,7 +53,7 @@ TOURIST_RULES = (
     IF( #R6
         AND(
             '(?x) is rich',
-            '(?x) is mouth-breather'
+            '(?x) is a mouth-breather'
         ),
         THEN(
             '(?x) is an aristrocrat'
