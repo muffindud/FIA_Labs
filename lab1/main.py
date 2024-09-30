@@ -1,5 +1,5 @@
 from rules import TOURIST_RULES
-from src.production import forward_chain, backward_chain, get_possible_conclusions, get_possible_initial_facts
+from src.production import *
 from json import dumps
 
 
@@ -38,6 +38,10 @@ def main():
                 print("Forward chaining")
                 print("What's the tourist's name?")
                 tourist_name = input(">")
+
+                initial_facts = get_possible_initial_facts(TOURIST_RULES)
+                for fact in initial_facts:
+                    print(fact.replace("(?x)", tourist_name))
             
             elif choice == 2:
                 print("Backward chaining")
@@ -50,4 +54,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    # main()
+    print(forward_chain(TOURIST_RULES, ("Bob is rude",)))

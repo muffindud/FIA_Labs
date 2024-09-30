@@ -26,7 +26,16 @@ def get_possible_initial_facts(rules):
     return all_antecedents - all_conclusions
 
 
-def forward_chain(rules, data, apply_only_one=False, verbose=False) -> dict:
+def get_predicate_fact(rules, hypothesis):
+    for rule in rules:
+        for consequent in rule.consequent():
+            bindings = match(consequent, hypothesis)
+            if bindings is not None:
+                antecedent = populate(rule.antecedent(), bindings)
+                return antecedent
+
+
+def forward_chain(rules: tuple, data: tuple, apply_only_one=False, verbose=False) -> dict:
     """
     Apply a list of IF-expressions (rules) through a set of data
     in order.  Return the modified data set that results from the
@@ -42,6 +51,7 @@ def forward_chain(rules, data, apply_only_one=False, verbose=False) -> dict:
 
     data_dict = {}
     deductions = []
+    conclusion = None
 
     while set(old_data) != set(data):
         old_data = list(data)
@@ -52,13 +62,13 @@ def forward_chain(rules, data, apply_only_one=False, verbose=False) -> dict:
                 deductions += conclusion
                 break
 
-    data_dict["data"] = list(set(data) - set(deductions))
-    data_dict["deductions"] = deductions
-    data_dict["conclusion"] = conclusion[0]
+    data_dict["data"] = set(data) - set(deductions)
+    data_dict["deductions"] = deductions if deductions else None
+    data_dict["conclusion"] = conclusion[0] if conclusion else None
     return data_dict
 
 
-def backward_chain(rules, hypothesis, known_facts=None, verbose=False):
+def backward_chain(rules: tuple, hypothesis: str, known_facts=None, verbose=False):
     # If the known facts are not provided, we assume there are none
     if known_facts is None:
         known_facts = set()
