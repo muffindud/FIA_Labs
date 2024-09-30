@@ -39,10 +39,30 @@ def main():
                 print("What's the tourist's name?")
                 tourist_name = input(">")
 
-                initial_facts = get_possible_initial_facts(TOURIST_RULES)
+                initial_facts = list(get_possible_initial_facts(TOURIST_RULES))
+                true_facts = []
+                # print(initial_facts)
+
                 for fact in initial_facts:
-                    print(fact.replace("(?x)", tourist_name))
-            
+                    print("Do you agree that " + fact.replace("(?x)", tourist_name) + "? [Y]es - [N]o - [U]nsure")
+                    answer = input(">")
+                    if answer.lower() == "y":
+                        true_facts.append(fact.replace("(?x)", tourist_name))
+                    elif answer.lower() == "n":
+                        pass
+                
+                print("True facts: ", true_facts)
+                print(forward_chain(TOURIST_RULES, set(true_facts)))
+
+                # print("Do you agree that " + initial_facts[0].replace("(?x)", tourist_name) + "? [Y]es - [N]o - [U]nsure")
+                # answer = input(">")
+                # if answer.lower() == "y":
+                #     true_facts.append(initial_facts[0].replace("(?x)", tourist_name))
+                # elif answer.lower() == "n":
+                #     pass
+                    
+                
+
             elif choice == 2:
                 print("Backward chaining")
                 # backward_chain(TOURIST_RULES, TEST_DATA, HYPOTHESIS)
@@ -54,5 +74,5 @@ def main():
 
 
 if __name__ == "__main__":
-    # main()
-    print(forward_chain(TOURIST_RULES, ("Bob is rude",)))
+    main()
+    # print(forward_chain(TOURIST_RULES, ("Bob has weird claims",)))
