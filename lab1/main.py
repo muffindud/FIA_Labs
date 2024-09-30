@@ -116,6 +116,4 @@ def main():
 
 
 if __name__ == "__main__":
-    # main()
-    # print(forward_chain(TOURIST_RULES, ("Bob has weird claims",)))
-    print(get_possible_conclusion_from_facts(TOURIST_RULES, ("Bob speaks Stellarian", "Bob has a performant camera")))
+    main()

@@ -35,7 +35,6 @@ def get_predicate_fact(rules, hypothesis):
                 return antecedent
 
 
-# get the set of facts that only make sense in the context of the given facts
 def get_possible_conclusion_from_facts(rules, facts):
     finial_conclusions = get_possible_conclusions(rules)
     initial_facts = get_possible_initial_facts(rules)
@@ -52,6 +51,22 @@ def get_possible_conclusion_from_facts(rules, facts):
                 break
 
     return useful_conclusions
+
+
+def get_initial_facts_for_conclusions(rules, conclusions):
+    initial_facts = get_possible_initial_facts(rules)
+    facts = set()
+
+    while len(conclusions) > 0:
+        conclusion = conclusions.pop()
+        predicate_facts = get_predicate_fact(rules, conclusion)
+        for fact in predicate_facts:
+            if fact in initial_facts:
+                facts.add(fact)
+            else:
+                conclusion
+
+    return facts
 
 
 def forward_chain(rules: tuple, data: tuple, apply_only_one=False, verbose=False) -> dict:
