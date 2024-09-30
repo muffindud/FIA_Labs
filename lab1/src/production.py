@@ -8,7 +8,7 @@ from src.utils import *
 ### >>> import production
 ### >>> help(production)
 
-def forward_chain(rules, data, apply_only_one=False, verbose=False):
+def forward_chain(rules, data, apply_only_one=False, verbose=False) -> dict:
     """
     Apply a list of IF-expressions (rules) through a set of data
     in order.  Return the modified data set that results from the
@@ -22,14 +22,22 @@ def forward_chain(rules, data, apply_only_one=False, verbose=False):
     """
     old_data = ()
 
+    data_dict = {}
+    deductions = []
+
     while set(old_data) != set(data):
         old_data = list(data)
         for condition in rules:
             data = condition.apply(data, apply_only_one, verbose)
             if set(data) != set(old_data):
+                conclusion = list(set(data) - set(old_data))
+                deductions += conclusion
                 break
 
-    return data
+    data_dict["data"] = list(set(data) - set(deductions))
+    data_dict["deductions"] = deductions
+    data_dict["conclusion"] = conclusion[0]
+    return data_dict
 
 
 def backward_chain(rules, hypothesis, known_facts=None, verbose=False):

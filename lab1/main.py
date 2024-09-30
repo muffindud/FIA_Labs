@@ -1,5 +1,6 @@
 from rules import TOURIST_RULES
 from src.production import forward_chain, backward_chain
+from json import dumps
 
 
 TEST_DATA = (
@@ -14,19 +15,8 @@ HYPOTHESIS = 'John is a vlogger'
 
 
 def main():
-    result = forward_chain(TOURIST_RULES, TEST_DATA, verbose=False)
-    for item in result:
-        if item not in TEST_DATA:
-            print(item)
-
-    print()
-
-    result = backward_chain(TOURIST_RULES, HYPOTHESIS, verbose=False)
-    for item in result:
-        if type(item) != str:
-            print(list(item))
-        else:
-            print(item)
+    data = forward_chain(TOURIST_RULES, TEST_DATA)
+    print(dumps(data, indent=4))
 
 
 if __name__ == "__main__":
