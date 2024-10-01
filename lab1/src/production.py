@@ -39,17 +39,37 @@ def get_possible_conclusion_from_facts(rules, facts):
     finial_conclusions = get_possible_conclusions(rules)
     initial_facts = get_possible_initial_facts(rules)
 
-    queued_conclusions = set(finial_conclusions)
+    intermediate_facts = set()
     useful_conclusions = set()
 
-    while len(queued_conclusions) > 0:
-        conclusion = queued_conclusions.pop()
+    while len(finial_conclusions) > 0:
+        conclusion = finial_conclusions.pop()
         predicate_facts = get_predicate_fact(rules, conclusion)
         for fact in predicate_facts:
-            if not fact in initial_facts and not fact in facts:
+            if fact in facts:
+                print("+ " + conclusion + " is useful because " + fact)
                 useful_conclusions.add(conclusion)
-                break
+            elif not fact in initial_facts:
+                print("? " + fact + " is queued because it's intermediate fact")
+                intermediate_facts.add((fact, conclusion),)
+            else:
+                print("- " + fact + " is not useful")
 
+    while len(intermediate_facts) > 0:
+        fact, conclusion = intermediate_facts.pop()
+        predicate_facts = get_predicate_fact(rules, fact)
+        print(predicate_facts)
+        for new_fact in predicate_facts:
+            if new_fact in facts:
+                print("+ " + fact + " is useful because " + new_fact)
+                useful_conclusions.add(conclusion)
+            elif not new_fact in initial_facts:
+                print("? " + new_fact + " is queued because it's intermediate fact")
+                intermediate_facts.add((new_fact, conclusion))
+            else:
+                print("- " + new_fact + " is not useful")
+
+    print(useful_conclusions)
     return useful_conclusions
 
 
@@ -67,6 +87,31 @@ def get_initial_facts_for_conclusions(rules, conclusions):
                 conclusion
 
     return facts
+
+
+def get_linked_facts(rules, facts):
+    final_conclusions = get_possible_conclusions(rules)
+    linked_facts = set()
+    for conclusion in final_conclusions:
+        conclusion_facts = backward_chain(rules, conclusion)
+        deset_conclusion_facts = set()
+
+        for conclusion_fact in conclusion_facts:
+            if isinstance(conclusion_fact, OR) or isinstance(conclusion_fact, AND):
+                deset_conclusion_facts = set(deset_conclusion_facts) | set(conclusion_fact)
+            else:
+                deset_conclusion_facts.add(conclusion_fact)
+
+        initial_conclusion_facts = set()
+        fact_relevat = False
+        for fact in deset_conclusion_facts:
+            initial_conclusion_facts.add(fact)
+            if fact in facts:
+                fact_relevat = True
+        if fact_relevat:
+            linked_facts = linked_facts | initial_conclusion_facts
+
+    return linked_facts
 
 
 def forward_chain(rules: tuple, data: tuple, apply_only_one=False, verbose=False) -> dict:

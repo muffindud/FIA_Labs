@@ -91,6 +91,7 @@ TOURIST_RULES = (
         AND(
             '(?x) speaks on the phone',
             '(?x) speaks a foreign language',
+            '(?x) wears a suit'
         ),
         THEN(
             '(?x) is a business traveler'

@@ -4,17 +4,6 @@ from json import dumps
 from random import shuffle
 
 
-TEST_DATA = (
-    'John has a performant camera',
-    'John films a lot',
-    'John speaks loudly',
-    'John doesn\'t take pictures',
-    'John is rude'
-)
-
-HYPOTHESIS = 'John is a vlogger'
-
-
 def main():
     while True:
         print("\033[H\033[J")
@@ -59,51 +48,32 @@ def main():
                 
                 for i in range(int(fact_count / 3)):
                     if str(i+1) in answer:
-                        true_facts.append(initial_facts[i].replace("(?x)", tourist_name))
+                        true_facts.append(initial_facts[i])
                     else:
-                        false_fact.append(initial_facts[i].replace("(?x)", tourist_name))
-
-                # Yes/No questions
-                while fact_index < int(fact_count / 3) * 2:
-                    print(f"Do you agree that {initial_facts[fact_index].replace('(?x)', tourist_name)}? [Y]es - [N]o")
-                    answer = input(">")
-                    if answer.lower() == "y":
-                        true_facts.append(initial_facts[fact_index].replace("(?x)", tourist_name))
-                    fact_index += 1
-
-                for fact in answer:
-                    true_facts.append(initial_facts[int(fact)-1].replace("(?x)", tourist_name))
+                        false_fact.append(initial_facts[i])
                 
-                # Score questions
-                while fact_index < fact_count:
-                    print(f"How much do you agree that {initial_facts[fact_index].replace('(?x)', tourist_name)}? [1-10]")
-                    answer = input(">")
-                    if int(answer) > 5:
-                        true_facts.append(initial_facts[fact_index].replace("(?x)", tourist_name))
-                    fact_index += 1
+                possible_concusions = get_possible_conclusion_from_facts(TOURIST_RULES, set(true_facts))
+                possible_facts = get_initial_facts_for_conclusions(TOURIST_RULES, possible_concusions)
+                unanswared_facts = list(set(possible_facts) - set(true_facts))
+                print(possible_concusions)
 
-                print("True facts: ", true_facts)
-                print(forward_chain(TOURIST_RULES, set(true_facts)))
+                # unanswared_facts_count = len(unanswared_facts)
 
-                # for fact in initial_facts:
-                #     print("Do you agree that " + fact.replace("(?x)", tourist_name) + "? [Y]es - [N]o - [U]nsure")
-                #     answer = input(">")
-                #     if answer.lower() == "y":
-                #         true_facts.append(fact.replace("(?x)", tourist_name))
-                #     elif answer.lower() == "n":
-                #         pass
-                
-                print("True facts: ", true_facts)
-                print(forward_chain(TOURIST_RULES, set(true_facts)))
+                # while len(possible_concusions) > 1:
+                #     print(possible_concusions)
+                #     print("Do you agree that " + unanswared_facts[0].replace('(?x)', tourist_name) + "? [y/n]")
+                #     answer = input(">").lower()
+                #     if answer == "y":
+                #         true_facts.append(unanswared_facts[0])
+                #     else:
+                #         false_fact.append(unanswared_facts[0])
+                #     unanswared_facts.pop(0)
+                #     unanswared_facts_count -= 1
+                #     possible_concusions = get_possible_conclusion_from_facts(TOURIST_RULES, set(true_facts))
 
-                # print("Do you agree that " + initial_facts[0].replace("(?x)", tourist_name) + "? [Y]es - [N]o - [U]nsure")
-                # answer = input(">")
-                # if answer.lower() == "y":
-                #     true_facts.append(initial_facts[0].replace("(?x)", tourist_name))
-                # elif answer.lower() == "n":
-                #     pass
-                    
-                
+                # print(possible_concusions)
+
+                # print(forward_chain(TOURIST_RULES, true_facts, false_fact, tourist_name))
 
             elif choice == 2:
                 print("Backward chaining")
