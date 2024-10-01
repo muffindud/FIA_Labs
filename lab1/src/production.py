@@ -47,29 +47,31 @@ def get_possible_conclusion_from_facts(rules, facts):
         predicate_facts = get_predicate_fact(rules, conclusion)
         for fact in predicate_facts:
             if fact in facts:
-                print("+ " + conclusion + " is useful because " + fact)
+                # print("+ " + conclusion + " is useful because " + fact)
                 useful_conclusions.add(conclusion)
             elif not fact in initial_facts:
-                print("? " + fact + " is queued because it's intermediate fact")
+                # print("? " + fact + " is queued because it's intermediate fact")
                 intermediate_facts.add((fact, conclusion),)
             else:
-                print("- " + fact + " is not useful")
+                # print("- " + fact + " is not useful")
+                pass
 
     while len(intermediate_facts) > 0:
         fact, conclusion = intermediate_facts.pop()
         predicate_facts = get_predicate_fact(rules, fact)
-        print(predicate_facts)
+        # print(predicate_facts)
         for new_fact in predicate_facts:
             if new_fact in facts:
-                print("+ " + fact + " is useful because " + new_fact)
+                # print("+ " + fact + " is useful because " + new_fact)
                 useful_conclusions.add(conclusion)
             elif not new_fact in initial_facts:
-                print("? " + new_fact + " is queued because it's intermediate fact")
+                # print("? " + new_fact + " is queued because it's intermediate fact")
                 intermediate_facts.add((new_fact, conclusion))
             else:
-                print("- " + new_fact + " is not useful")
+                # print("- " + new_fact + " is not useful")
+                pass
 
-    print(useful_conclusions)
+    # print(useful_conclusions)
     return useful_conclusions
 
 

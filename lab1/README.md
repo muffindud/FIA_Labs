@@ -6,7 +6,7 @@
 2. [x] Implement the rules from the defined tree in Task 1 in your code (use the IF, AND, OR and THEN rules which are already implemented).
 3. [x] If you are using the provided code, check how the Forward Chaining algorithm works and illustrate an example. If you are implementing your own code, implement the Forward Chaining algorithm yourself.
 4. [x] Implement the Backward Chaining algorithm for the Goal Tree.
-5. [ ] Implement a system for generating questions from the Goal Tree. Have at least 3 types of questions (e.g. yes/no, multiple choice, etc).
+5. [x] Implement a system for generating questions from the Goal Tree. Have at least 3 types of questions (e.g. yes/no, multiple choice, etc).
 6. [ ] Wrap up everything in an interactive Expert System that will dynamically ask questions based on the input from the user. Both Forward Chaining and Backward Chaining should be working.
 7. [ ] Format the output and questions in a human-readable format (they should respect the grammatical rules of the English language).
 
