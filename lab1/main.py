@@ -1,3 +1,5 @@
+#!./venv/bin/python3
+
 from rules import TOURIST_RULES
 from src.production import *
 from json import dumps
@@ -76,7 +78,19 @@ def main():
 
             elif choice == 2:
                 print("Backward chaining")
-                # backward_chain(TOURIST_RULES, TEST_DATA, HYPOTHESIS)
+                print("Hypothesis:")
+                hypothesis = input(">")
+                facts = backward_chain(TOURIST_RULES, hypothesis)
+                for fact in facts:
+                    if isinstance(fact, OR):
+                        for i in range(len(fact)):
+                            print(fact[i], end="")
+                            if i < len(fact) - 1:
+                                print(" OR ", end="")
+                        else:
+                            print()
+                    else:
+                        print(fact)
 
             else:
                 print("Invalid choice. Please enter a valid option.")
