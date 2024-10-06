@@ -4,7 +4,7 @@
 ### Group: **FAF-213**
 
 ## Laboratory works:
-<!-- 1. [Laboratory Work No. 1]() -->
+1. [Laboratory Work No. 1](./lab1/)
 <!-- 2. [Laboratory Work No. 2]() -->
 <!-- 3. [Laboratory Work No. 3]() -->
 <!-- 4. [Laboratory Work No. 4]() -->
