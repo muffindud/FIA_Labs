@@ -2,7 +2,6 @@
 
 from rules import TOURIST_RULES
 from src.production import *
-from json import dumps
 import random
 
 

@@ -149,15 +149,7 @@ def forward_chain(rules: tuple, data: tuple, apply_only_one=False, verbose=False
     return data_dict
 
 
-def backward_chain(rules: tuple, hypothesis: str, known_facts=None, verbose=False):
-    # If the known facts are not provided, we assume there are none
-    if known_facts is None:
-        known_facts = set()
-
-    # If the hypothesis is already a known fact, we don't need to prove it
-    if hypothesis in known_facts:
-        return PASS
-    
+def backward_chain(rules: tuple, hypothesis: str, verbose=False):
     goal_tree = []
 
     # Try to match the hypothesis with the consequents of the rules
@@ -178,14 +170,14 @@ def backward_chain(rules: tuple, hypothesis: str, known_facts=None, verbose=Fals
                         print(f"Attempting to prove intermediate fact: {antecedent}")
                     
                     # Recursively try to prove the antecedent
-                    result = backward_chain(rules, antecedent, known_facts, verbose)
+                    result = backward_chain(rules, antecedent, verbose)
                     goal_tree.append(result)
                 
                 # If it's a conjunction (AND), we recursively try to prove each part
                 elif isinstance(antecedent, AND):
                     sub_goals = []
                     for sub_condition in antecedent:
-                        sub_goal = backward_chain(rules, sub_condition, known_facts, verbose)
+                        sub_goal = backward_chain(rules, sub_condition, verbose)
                         sub_goals.append(sub_goal)
                     goal_tree.append(AND(*sub_goals))
                 
@@ -193,7 +185,7 @@ def backward_chain(rules: tuple, hypothesis: str, known_facts=None, verbose=Fals
                 elif isinstance(antecedent, OR):
                     sub_goals = []
                     for sub_condition in antecedent:
-                        sub_goal = backward_chain(rules, sub_condition, known_facts, verbose)
+                        sub_goal = backward_chain(rules, sub_condition, verbose)
                         sub_goals.append(sub_goal)
                     goal_tree.append(OR(*sub_goals))
 
