@@ -2,7 +2,6 @@
 
 from rules import TOURIST_RULES
 from src.production import *
-from json import dumps
 import random
 
 
@@ -61,20 +60,36 @@ def main():
                         question_type = random.choice([1, 2])
                         if question_type == 1:
                             print(f"Do you agree that {fact.replace('(?x)', tourist_name)}? [y/n]")
-                            answer = input("[y/n] >").lower()
-                            if answer == "y":
-                                true_facts.append(fact)
-                            else:
-                                false_fact.append(fact)
+                            while True:
+                                answer = input("[y/n] >").lower()
+                                if answer == "y":
+                                    true_facts.append(fact)
+                                    break
+                                elif answer == "n":
+                                    false_fact.append(fact)
+                                    break
+                                else:
+                                    print("Invalid answer. Please enter 'y' or 'n'.")
                         elif question_type == 2:
                             print(f"On a scale of 1-10, how much do you agree that {fact.replace('(?x)', tourist_name)}?")
-                            answer = int(input("[1-10]>"))
-                            if answer > 5:
-                                true_facts.append(fact)
-                            else:
-                                false_fact.append(fact)
-
-                print("Conclusion: " + forward_chain(TOURIST_RULES, true_facts)["conclusion"].replace('(?x)', tourist_name))
+                            while True:
+                                try:
+                                    answer = int(input("[1-10]>"))
+                                except ValueError:
+                                    print("Invalid answer. Please enter a number between 1-10.")
+                                else:
+                                    if answer > 5 and answer <= 10:
+                                        true_facts.append(fact)
+                                        break
+                                    elif answer >= 1 and answer <= 5:
+                                        false_fact.append(fact)
+                                        break
+                                    else:
+                                        print("Invalid answer. Please enter a number between 1-10.")
+                try:
+                    print("Conclusion: " + forward_chain(TOURIST_RULES, true_facts)["conclusion"].replace('(?x)', tourist_name))
+                except KeyError:
+                    print("No conclusion can be drawn.")
 
             elif choice == 2:
                 print("Backward chaining")
