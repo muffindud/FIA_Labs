@@ -104,11 +104,11 @@ class ReflexAgent(Agent):
         return 1000/sum(mFoodDist) + 10000/len(mFoodDist)
 
 
-def defaultScoreEvaluationFunction(currentGameState):
+def defaultEval(currentGameState):
     return currentGameState.getScore()
 
 
-def customScoreEvaluationFunction(currentGameState):
+def customEval(currentGameState):
     """
       This default evaluation function just returns the score of the state.
       The score is the same one displayed in the Pacman GUI.
@@ -152,7 +152,7 @@ class MultiAgentSearchAgent(Agent):
       is another abstract class.
     """
 
-    def __init__(self, evalFn='scoreEvaluationFunction', depth='2'):
+    def __init__(self, evalFn='defaultEval', depth='2'):
         self.index = 0 # Pacman is always agent index 0
         self.evaluationFunction = util.lookup(evalFn, globals())
         self.depth = int(depth)
@@ -162,7 +162,7 @@ class MinimaxAgent(MultiAgentSearchAgent):
     """
       Here is the place to define your MiniMax Algorithm
     """
-    def __init__(self, evalFn='customScoreEvaluationFunction', depth='2'):
+    def __init__(self, evalFn='defaultEval', depth='2'):
         self.index = 0 # Pacman is always agent index 0
         self.evaluationFunction = util.lookup(evalFn, globals())
         self.depth = int(depth)
@@ -234,7 +234,7 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
     """
       Here is the place to define your Alpha-Beta Pruning Algorithm
     """
-    def __init__(self, evalFn='defaultScoreEvaluationFunction', depth='2'):
+    def __init__(self, evalFn='defaultEval', depth='2'):
         self.index = 0 # Pacman is always agent index 0
         self.evaluationFunction = util.lookup(evalFn, globals())
         self.depth = int(depth)
@@ -353,7 +353,7 @@ def betterEvaluationFunction(currentGameState):
     if len(scaredGhostDistList) > 0:
         minScaredGhostDist = min(scaredGhostDistList)
     # Evaluate score
-    score = scoreEvaluationFunction(currentGameState)
+    score = defaultEval(currentGameState)
     """
         Your improved evaluation here
     """
