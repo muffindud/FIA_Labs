@@ -7,7 +7,7 @@
     where:
     - `Pallet_Score` - the distance to the closest pallet (food);
     - `Ghost_Danger` - the distance to the nearest ghost.
-2. [ ] Implement Alpha-Beta Pruning.
+2. [x] Implement Alpha-Beta Pruning.
 3. [ ] Implement an improved scoring (evaluation) method for MiniMax. For example, you could add values like MazeComplexity, PalletNumber per region or GhostVulnerability. Be creative!
 `Note: you can get bonuses implementing adding more characteristics to the evaluation. For the second scoring improvement you get 0.5p, for 3rd you get 0.25p, for 4th- 0.125p and so on...`
 4. [ ] Add at least one improvement to the MiniMax algorithm from the following list: Progressive Deepening, Transposition Tables, Opening Books, Move Ordering, Aspiration Window, etc.

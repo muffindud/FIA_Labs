@@ -104,7 +104,11 @@ class ReflexAgent(Agent):
         return 1000/sum(mFoodDist) + 10000/len(mFoodDist)
 
 
-def scoreEvaluationFunction(currentGameState):
+def defaultScoreEvaluationFunction(currentGameState):
+    return currentGameState.getScore()
+
+
+def customScoreEvaluationFunction(currentGameState):
     """
       This default evaluation function just returns the score of the state.
       The score is the same one displayed in the Pacman GUI.
@@ -116,9 +120,6 @@ def scoreEvaluationFunction(currentGameState):
     """
         Your improved evaluation function here
     """
-    # score = pallet_score - ghost_danger
-    # pallet_score = distance to closest pallet
-    # ghost_danger = distance to closest ghost
     foodList = currentGameState.getFood().asList()
     pacmanPos = currentGameState.getPacmanPosition()
     ghostStates = currentGameState.getGhostStates()
@@ -130,12 +131,10 @@ def scoreEvaluationFunction(currentGameState):
     else:
         minFoodDist = min(foodDist)
         minGhostDist = min(ghostDist)
-    
-    # print("Food Dist: ", minFoodDist, "Ghost Dist: ", minGhostDist)
-    
-    return minFoodDist - minGhostDist
 
-    return currentGameState.getScore()
+    # print("Food Dist: ", minFoodDist, "Ghost Dist: ", minGhostDist)
+
+    return minFoodDist - minGhostDist
 
 
 class MultiAgentSearchAgent(Agent):
@@ -163,6 +162,10 @@ class MinimaxAgent(MultiAgentSearchAgent):
     """
       Here is the place to define your MiniMax Algorithm
     """
+    def __init__(self, evalFn='customScoreEvaluationFunction', depth='2'):
+        self.index = 0 # Pacman is always agent index 0
+        self.evaluationFunction = util.lookup(evalFn, globals())
+        self.depth = int(depth)
 
     def getAction(self, gameState):
         """
@@ -231,12 +234,62 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
     """
       Here is the place to define your Alpha-Beta Pruning Algorithm
     """
+    def __init__(self, evalFn='defaultScoreEvaluationFunction', depth='2'):
+        self.index = 0 # Pacman is always agent index 0
+        self.evaluationFunction = util.lookup(evalFn, globals())
+        self.depth = int(depth)
 
     def getAction(self, gameState):
         """
           Your code here
         """
-        pass
+        legalActions = gameState.getLegalActions(0)
+        bestAction = None
+        alpha = float("-inf")
+        beta = float("inf")
+        bestScore = float("-inf")
+        for action in legalActions:
+            successor = gameState.generateSuccessor(0, action)
+            score = self.alphabeta(successor, self.depth, 1, alpha, beta)
+            if score > bestScore:
+                bestScore = score
+                bestAction = action
+        return bestAction
+
+    def alphabeta(self, gameState, depth, agentIndex, alpha, beta):
+        if depth == 0 or gameState.isWin() or gameState.isLose():
+            score = self.evaluationFunction(gameState)
+            return score
+
+        if agentIndex == 0:
+            return self.maxValue(gameState, depth, agentIndex, alpha, beta)
+        else:
+            return self.minValue(gameState, depth, agentIndex, alpha, beta)
+
+    def maxValue(self, gameState, depth, agentIndex, alpha, beta):
+        v = float("-inf")
+        legalActions = gameState.getLegalActions(agentIndex)
+        for action in legalActions:
+            successor = gameState.generateSuccessor(agentIndex, action)
+            v = max(v, self.alphabeta(successor, depth, agentIndex + 1, alpha, beta))
+            if v > beta:
+                return v
+            alpha = max(alpha, v)
+        return v
+
+    def minValue(self, gameState, depth, agentIndex, alpha, beta):
+        v = float("inf")
+        legalActions = gameState.getLegalActions(agentIndex)
+        for action in legalActions:
+            successor = gameState.generateSuccessor(agentIndex, action)
+            if agentIndex == gameState.getNumAgents() - 1:
+                v = min(v, self.alphabeta(successor, depth - 1, 0, alpha, beta))
+            else:
+                v = min(v, self.alphabeta(successor, depth, agentIndex + 1, alpha, beta))
+            if v < alpha:
+                return v
+            beta = min(beta, v)
+        return v
 
 
 class AStarMinimaxAgent(MultiAgentSearchAgent):
