@@ -137,6 +137,24 @@ def customEval(currentGameState):
     return minFoodDist - minGhostDist
 
 
+def customImprovedEval(currentGameState):
+    foodList = currentGameState.getFood().asList()
+    pacmanPos = currentGameState.getPacmanPosition()
+    ghostStates = currentGameState.getGhostStates()
+    foodDist = [manhattanDistance(pacmanPos, food) for food in foodList]
+    ghostDist = [manhattanDistance(pacmanPos, ghost.getPosition()) for ghost in ghostStates if ghost.scaredTimer == 0]
+    vulnerableGhostDist = [manhattanDistance(pacmanPos, ghost.getPosition()) for ghost in ghostStates if ghost.scaredTimer > 0]
+    if len(foodDist) == 0:
+        return float("inf")
+    else:
+        minFoodDist = min(foodDist)
+        minGhostDist = min(ghostDist + [float("inf")])
+
+    # print("Food Dist: ", minFoodDist, "Ghost Dist: ", minGhostDist)
+
+    return minFoodDist - minGhostDist + sum(vulnerableGhostDist)
+
+
 class MultiAgentSearchAgent(Agent):
     """
       This class provides some common elements to all of your
