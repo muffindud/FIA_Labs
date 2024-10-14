@@ -11,7 +11,7 @@ def main(args):
         case '3':
             pacman("-p MinimaxAgent -a depth=3,evalFn=customImprovedEval --frameTime=0 -n 1".split(' '))
         case '4':
-            ...
+            pacman("-p MinimaxAgentTranspositionTable -a depth=4,evalFn=defaultEval --frameTime=0 -n 1".split(' '))
         case '5':
             ...
         case '6':

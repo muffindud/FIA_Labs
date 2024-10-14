@@ -257,6 +257,115 @@ class MinimaxAgent(MultiAgentSearchAgent):
         return v
 
 
+class MinimaxAgentTranspositionTable(MultiAgentSearchAgent):
+    """
+      Here is the place to define your MiniMax Algorithm
+    """
+    def __init__(self, evalFn='defaultEval', depth='2', pastStatesLen=10, patternStatesLen=4):
+        self.index = 0 # Pacman is always agent index 0
+        self.evaluationFunction = util.lookup(evalFn, globals())
+        self.depth = int(depth)
+        self.pastStatesLen = pastStatesLen
+        self.patternStatesLen = patternStatesLen
+
+    # Holds an extended state history
+    pastStatesQueue = None
+    # Holds the pattern of the last few states
+    patternStatesQueue = None
+
+    # Add the state to the pastStatesQueue and patternStatesQueue
+    def pushState(self, gameState):
+        # Push the state to the pastStatesQueue
+        if self.pastStatesQueue is None:
+            self.pastStatesQueue = []
+        if len(self.pastStatesQueue) == self.pastStatesLen:
+            self.pastStatesQueue.pop(0)
+        self.pastStatesQueue.append(gameState)
+
+        # Push the state to the patternStatesQueue
+        if self.patternStatesQueue is None:
+            self.patternStatesQueue = []
+        if len(self.patternStatesQueue) == self.patternStatesLen:
+            self.patternStatesQueue.pop(0)
+        self.patternStatesQueue.append(gameState)
+
+    # Check if the state is repeated
+    def isRepeatedState(self):
+        if len(self.pastStatesQueue) < self.pastStatesLen:
+            return False
+        for i in range(len(self.pastStatesQueue) - self.patternStatesLen):
+            if self.patternStatesQueue == self.pastStatesQueue[i:i+self.patternStatesLen]:
+                return True
+        return False
+
+    def getAction(self, gameState):
+        """
+          Returns the minimax action from the current gameState using self.depth
+          and self.evaluationFunction.
+
+          Here are some method calls that might be useful when implementing minimax.
+
+          gameState.getLegalActions(agentIndex):
+            Returns a list of legal actions for an agent
+            agentIndex=0 means Pacman, ghosts are >= 1
+
+          gameState.generateSuccessor(agentIndex, action):
+            Returns the successor game state after an agent takes an action
+
+          gameState.getNumAgents():
+            Returns the total number of agents in the game
+        """
+        """
+            Your code here
+        """
+        self.pushState(gameState.getPacmanPosition())
+        legalActions = gameState.getLegalActions(0)
+        bestAction = None
+        secondBestAction = random.choice(legalActions)
+        bestScore = float("-inf")
+        for action in legalActions:
+            successor = gameState.generateSuccessor(0, action)
+            score = self.minimax(successor, self.depth, 1)
+
+            if score > bestScore:
+                secondBestAction = bestAction if bestAction is not None else secondBestAction
+                bestScore = score
+                bestAction = action
+        if self.isRepeatedState():
+            print("Repeated state detected")
+            return secondBestAction
+        return bestAction
+
+    def minimax(self, gameState, depth, agentIndex):
+        if depth == 0 or gameState.isWin() or gameState.isLose():
+            score = self.evaluationFunction(gameState)
+            return score
+
+        if agentIndex == 0:
+            return self.maxValue(gameState, depth, agentIndex)
+        else:
+            return self.minValue(gameState, depth, agentIndex)
+
+    def maxValue(self, gameState, depth, agentIndex):
+        v = float("-inf")
+        legalActions = gameState.getLegalActions(agentIndex)
+        for action in legalActions:
+            successor = gameState.generateSuccessor(agentIndex, action)
+            v = max(v, self.minimax(successor, depth, agentIndex + 1))
+        return v
+
+    def minValue(self, gameState, depth, agentIndex):
+        v = float("inf")
+        legalActions = gameState.getLegalActions(agentIndex)
+        for action in legalActions:
+            successor = gameState.generateSuccessor(agentIndex, action)
+            if agentIndex == gameState.getNumAgents() - 1:
+                v = min(v, self.minimax(successor, depth - 1, 0))
+            else:
+                v = min(v, self.minimax(successor, depth, agentIndex + 1))
+        return v
+
+
 class AlphaBetaAgent(MultiAgentSearchAgent):
     """
       Here is the place to define your Alpha-Beta Pruning Algorithm
