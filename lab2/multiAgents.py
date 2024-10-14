@@ -132,9 +132,7 @@ def customEval(currentGameState):
         minFoodDist = min(foodDist)
         minGhostDist = min(ghostDist)
 
-    # print("Food Dist: ", minFoodDist, "Ghost Dist: ", minGhostDist)
-
-    return minFoodDist - minGhostDist
+    return minGhostDist - minFoodDist
 
 
 def customImprovedEval(currentGameState):
@@ -147,12 +145,22 @@ def customImprovedEval(currentGameState):
     if len(foodDist) == 0:
         return float("inf")
     else:
+        scaredGhosts = False
         minFoodDist = min(foodDist)
-        minGhostDist = min(ghostDist + [float("inf")])
+        if len(ghostDist) == 0:
+            scaredGhosts = True
+            minGhostDist = 0
+        else:
+            minGhostDist = min(ghostDist)
+        if len(vulnerableGhostDist) == 0:
+            minVulnerableGhostDist = 0
+        else:
+            minVulnerableGhostDist = min(vulnerableGhostDist)
 
-    # print("Food Dist: ", minFoodDist, "Ghost Dist: ", minGhostDist)
-
-    return minFoodDist - minGhostDist + sum(vulnerableGhostDist)
+    if scaredGhosts:
+        return minFoodDist + minVulnerableGhostDist
+    else:
+        return minGhostDist - minFoodDist + minVulnerableGhostDist
 
 
 class MultiAgentSearchAgent(Agent):
@@ -213,6 +221,7 @@ class MinimaxAgent(MultiAgentSearchAgent):
             successor = gameState.generateSuccessor(0, action)
             score = self.minimax(successor, self.depth, 1)
             # print("Action: ", action, "Score: ", score)
+            # input("Press Enter to continue...")
             if score > bestScore:
                 bestScore = score
                 bestAction = action
