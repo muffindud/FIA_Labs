@@ -34,3 +34,19 @@ def format_grid(grid: list[list[int]]) -> str:
     """
 
     return grid_str
+
+
+def is_vaild(grid: list[list[int]], row: int, col: int, num: int) -> bool:
+    for i in range(9):
+        if grid[row][i] == num:
+            return False
+        if grid[i][col] == num:
+            return False
+
+    start_row, start_col = 3 * (row // 3), 3 * (col // 3)
+    for i in range(3):
+        for j in range(3):
+            if grid[i + start_row][j + start_col] == num:
+                return False
+
+    return True
