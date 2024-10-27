@@ -83,7 +83,7 @@ def get_valid_numbers(grid: GridType, row: int, col: int) -> list[int]:
     :param col: The column of the cell
     :return: A list of valid numbers
     """
-    valid_numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    valid_numbers = list(range(1, 10))
     for i in range(9):
         if grid[row][i] in valid_numbers:
             valid_numbers.remove(grid[row][i])
@@ -170,3 +170,35 @@ def get_single_possibilities(grid: GridType) -> dict[tuple[int, int], int]:
             single_possibilities[(row, column)] = valid_numbers[0]
 
     return single_possibilities
+
+
+def generate_grid(starting_cells: int = 33) -> GridType:
+    """Generate a random Sudoku grid
+
+    :param empty_cells: The number of starting cells in the grid (from 17 to 81)
+    :return: A random Sudoku grid
+    """
+    from random import sample, randint
+
+    row_base = range(3)
+    rows = [i * 3 + row for i in sample(row_base, 3) for row in sample(row_base, 3)]
+    columns = [i * 3 + column for i in sample(row_base, 3) for column in sample(row_base, 3)]
+    numbers = sample(range(1, 10), 9)
+
+    grid = [[numbers[(3 * (row % 3) + row // 3 + column) % 9] for column in columns] for row in rows]
+
+    empty_cells = 81 - starting_cells
+    if starting_cells > 81:
+        print("The number of starting cells must be between 17 and 81, setting to 33")
+        empty_cells = 81 - 33
+    elif starting_cells < 17:
+        print("The number of starting cells must be at least 17, setting to 17")
+        empty_cells = 81 - 17
+
+    for _ in range(empty_cells):
+        row, column = randint(0, 8), randint(0, 8)
+        while grid[row][column] == 0:
+            row, column = randint(0, 8), randint(0, 8)
+        grid[row][column] = 0
+
+    return grid
