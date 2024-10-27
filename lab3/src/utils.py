@@ -140,3 +140,33 @@ def find_empty_cell(grid: GridType) -> tuple[int, int]:
                 return i, j
 
     return None
+
+
+def get_empty_cells(grid: GridType) -> list[tuple[int, int]]:
+    """Get a list of empty cells in a grid
+
+    :param grid: The grid to check
+    :return: A list of empty cells
+    """
+    empty_cells = []
+    for i in range(9):
+        for j in range(9):
+            if grid[i][j] == 0:
+                empty_cells.append((i, j))
+
+    return empty_cells
+
+
+def get_single_possibilities(grid: GridType) -> dict[tuple[int, int], int]:
+    """Get cells with only one possible number
+
+    :param grid: The grid to check
+    :return: A dictionary of cells with only one possible number
+    """
+    single_possibilities = {}
+    for row, column in get_empty_cells(grid):
+        valid_numbers = get_valid_numbers(grid, row, column)
+        if len(valid_numbers) == 1:
+            single_possibilities[(row, column)] = valid_numbers[0]
+
+    return single_possibilities

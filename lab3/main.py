@@ -4,10 +4,10 @@ from copy import deepcopy
 from time import time
 
 
-PRINT_DELAY = 0.0
+PRINT_DELAY = 0.1
 
 
-def main():
+def main_1():
     with open("grids/grid4.txt", "r") as f:
         grid_str = f.read()
     grid = parse_grid(grid_str)
@@ -38,5 +38,27 @@ def main():
     print(f"Unoptimized backtracking: {end_time_ub - start_time_ub:.2f} seconds")
     print(f"Optimized backtracking: {end_time_ob - start_time_ob:.2f} seconds")
 
+
+def main_2():
+    with open("grids/grid2.txt", "r") as f:
+        grid_str = f.read()
+    grid = parse_grid(grid_str)
+
+    start_time_hs = time()
+    single_cell = single_cell_complete(
+        deepcopy(grid),
+        PRINT_DELAY
+    )
+    end_time_hs = time()
+
+    print("Original grid:")
+    print(format_grid(grid))
+
+    print("Single cell solve:")
+    print(format_grid(single_cell))
+
+    print(f"Heuristic solve: {end_time_hs - start_time_hs:.2f} seconds")
+
+
 if __name__ == "__main__":
-    main()
+    main_2()

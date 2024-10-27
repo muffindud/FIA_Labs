@@ -61,7 +61,7 @@ def solve_backtracking_optimzed(grid: GridType, print_delay: float = 0.0) -> Gri
         """
         while True:
             # Task 2
-            rc = find_empty_cell(grid) 
+            rc = find_empty_cell(grid)
 
             if rc is None:
                 break
@@ -87,6 +87,31 @@ def solve_backtracking_optimzed(grid: GridType, print_delay: float = 0.0) -> Gri
         return True
 
     solve(grid)
+
+    if print_delay != 0.0:
+        print("\033[H\033[J")
+
+    return grid
+
+
+def single_cell_complete(grid: GridType, print_delay: float = 0.0) -> GridType:
+    """Solve a Sudoku grid using a heuristic approach
+
+    :param grid: The grid to solve
+    :return: The solved grid
+    """
+
+    changed = True
+    while changed:
+        changed = False
+        for (row, column), num in get_single_possibilities(grid).items():
+            changed = True
+            grid[row][column] = num
+
+            if print_delay != 0.0:
+                print("\033[H\033[J")
+                print(format_grid(grid))
+                sleep(print_delay)
 
     if print_delay != 0.0:
         print("\033[H\033[J")
