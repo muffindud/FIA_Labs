@@ -9,6 +9,8 @@ def solve_backtracking(grid: GridType, print_delay: float = 0.0) -> GridType:
     :param grid: The grid to solve
     :return: The solved grid
     """
+    if not check_grid(grid):
+        raise ValueError("Invalid grid")
 
     def solve(grid: GridType) -> bool:
         """Solve the grid using backtracking
@@ -52,6 +54,8 @@ def solve_backtracking_optimzed(grid: GridType, print_delay: float = 0.0) -> Gri
     :param grid: The grid to solve
     :return: The solved grid
     """
+    if not check_grid(grid):
+        raise ValueError("Invalid grid")
 
     def solve(grid: GridType) -> bool:
         """Solve the grid using backtracking
@@ -100,6 +104,8 @@ def single_cell_complete(grid: GridType, print_delay: float = 0.0) -> GridType:
     :param grid: The grid to solve
     :return: The solved grid
     """
+    if not check_grid(grid):
+        raise ValueError("Invalid grid")
 
     changed = True
     while changed:

@@ -172,6 +172,7 @@ def get_single_possibilities(grid: GridType) -> dict[tuple[int, int], int]:
     return single_possibilities
 
 
+# Task 5
 def generate_grid(starting_cells: int = 33) -> GridType:
     """Generate a random Sudoku grid
 
