@@ -83,10 +83,22 @@ def get_valid_numbers(grid: GridType, row: int, col: int) -> list[int]:
     :param col: The column of the cell
     :return: A list of valid numbers
     """
-    valid_numbers = []
-    for num in range(1, 10):
-        if is_vaild(grid, row, col, num):
-            valid_numbers.append(num)
+    valid_numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    for i in range(9):
+        if grid[row][i] in valid_numbers:
+            valid_numbers.remove(grid[row][i])
+        if grid[i][col] in valid_numbers:
+            valid_numbers.remove(grid[i][col])
+        if not valid_numbers:
+            return []
+
+    start_row, start_col = 3 * (row // 3), 3 * (col // 3)
+    for i in range(3):
+        for j in range(3):
+            if grid[i + start_row][j + start_col] in valid_numbers:
+                valid_numbers.remove(grid[i + start_row][j + start_col])
+            if not valid_numbers:
+                return []
 
     return valid_numbers
 
