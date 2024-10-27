@@ -93,3 +93,29 @@ def get_valid_numbers(grid: GridType, row: int, col: int) -> list[int]:
             valid_numbers.append(num)
 
     return valid_numbers
+
+
+def check_grid(grid: GridType) -> bool:
+    """Check if a grid is in a valid state
+
+    Keyword arguments:
+    grid -- The grid to check
+    Return: True if the grid is valid, False otherwise
+    """
+    for row in grid:
+        row_nums = [num for num in row if num != 0]
+        if len(row_nums) != len(set(row_nums)):
+            return False
+
+    for col in range(9):
+        col_nums = [grid[row][col] for row in range(9) if grid[row][col] != 0]
+        if len(col_nums) != len(set(col_nums)):
+            return False
+
+    for i in range(3):
+        for j in range(3):
+            square_nums = [grid[row][col] for row in range(3 * i, 3 * i + 3) for col in range(3 * j, 3 * j + 3) if grid[row][col] != 0]
+            if len(square_nums) != len(set(square_nums)):
+                return False
+
+    return True
