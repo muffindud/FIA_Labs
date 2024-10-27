@@ -1,4 +1,14 @@
-def parse_grid(grid_str: str) -> list[list[int]]:
+""""Grid type definition"""
+GridType = list[list[int]]
+
+
+def parse_grid(grid_str: str) -> GridType:
+    """Parse a string into a grid
+
+    Keyword arguments:
+    grid_str -- The string to parse
+    Return: The parsed grid
+    """
     grid = []
 
     for row in grid_str.split("\n"):
@@ -8,7 +18,13 @@ def parse_grid(grid_str: str) -> list[list[int]]:
     return grid
 
 
-def format_grid(grid: list[list[int]]) -> str:
+def format_grid(grid: GridType) -> str:
+    """Format a grid into an ASCII art string
+
+    Keyword arguments:
+    grid -- The grid to format
+    Return: The formatted grid as a string
+    """
     g = [[str(cell) if cell != 0 else " " for cell in row] for row in grid]
 
     grid_str = f"""
@@ -36,7 +52,17 @@ def format_grid(grid: list[list[int]]) -> str:
     return grid_str
 
 
-def is_vaild(grid: list[list[int]], row: int, col: int, num: int) -> bool:
+
+def is_vaild(grid: GridType, row: int, col: int, num: int) -> bool:
+    """Check if a number can be placed in a cell
+
+    Keyword arguments:
+    grid -- The grid to check
+    row -- The row to check
+    col -- The column to check
+    num -- The number to check
+    Return: True if the number can be placed in the cell, False otherwise
+    """
     for i in range(9):
         if grid[row][i] == num:
             return False
@@ -50,3 +76,20 @@ def is_vaild(grid: list[list[int]], row: int, col: int, num: int) -> bool:
                 return False
 
     return True
+
+
+def get_valid_numbers(grid: GridType, row: int, col: int) -> list[int]:
+    """Get valid numbers for a cell
+
+    Keyword arguments:
+    grid -- The grid to check
+    row -- The row of the cell
+    col -- The column of the cell
+    Return: A list of valid numbers for the cell
+    """
+    valid_numbers = []
+    for num in range(1, 10):
+        if is_vaild(grid, row, col, num):
+            valid_numbers.append(num)
+
+    return valid_numbers
