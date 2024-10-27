@@ -1,13 +1,12 @@
-""""Grid type definition"""
+"""Grid type definition"""
 GridType = list[list[int]]
 
 
 def parse_grid(grid_str: str) -> GridType:
     """Parse a string into a grid
 
-    Keyword arguments:
-    grid_str -- The string to parse
-    Return: The parsed grid
+    :param grid_str: The string to parse
+    :return: The parsed grid
     """
     grid = []
 
@@ -21,9 +20,8 @@ def parse_grid(grid_str: str) -> GridType:
 def format_grid(grid: GridType) -> str:
     """Format a grid into an ASCII art string
 
-    Keyword arguments:
-    grid -- The grid to format
-    Return: The formatted grid as a string
+    :param grid: The grid to format
+    :return: The formatted grid
     """
     g = [[str(cell) if cell != 0 else " " for cell in row] for row in grid]
 
@@ -56,12 +54,11 @@ def format_grid(grid: GridType) -> str:
 def is_vaild(grid: GridType, row: int, col: int, num: int) -> bool:
     """Check if a number can be placed in a cell
 
-    Keyword arguments:
-    grid -- The grid to check
-    row -- The row to check
-    col -- The column to check
-    num -- The number to check
-    Return: True if the number can be placed in the cell, False otherwise
+    :param grid: The grid to check
+    :param row: The row of the cell
+    :param col: The column of the cell
+    :param num: The number to check
+    :return: True if the number can be placed, False otherwise
     """
     for i in range(9):
         if grid[row][i] == num:
@@ -81,11 +78,10 @@ def is_vaild(grid: GridType, row: int, col: int, num: int) -> bool:
 def get_valid_numbers(grid: GridType, row: int, col: int) -> list[int]:
     """Get valid numbers for a cell
 
-    Keyword arguments:
-    grid -- The grid to check
-    row -- The row of the cell
-    col -- The column of the cell
-    Return: A list of valid numbers for the cell
+    :param grid: The grid to check
+    :param row: The row of the cell
+    :param col: The column of the cell
+    :return: A list of valid numbers
     """
     valid_numbers = []
     for num in range(1, 10):
@@ -98,9 +94,8 @@ def get_valid_numbers(grid: GridType, row: int, col: int) -> list[int]:
 def check_grid(grid: GridType) -> bool:
     """Check if a grid is in a valid state
 
-    Keyword arguments:
-    grid -- The grid to check
-    Return: True if the grid is valid, False otherwise
+    :param grid: The grid to check
+    :return: True if the grid is valid, False otherwise
     """
     for row in grid:
         row_nums = [num for num in row if num != 0]
@@ -119,3 +114,17 @@ def check_grid(grid: GridType) -> bool:
                 return False
 
     return True
+
+
+def find_empty_cell(grid: GridType) -> tuple[int, int]:
+    """Find an empty cell in a grid
+
+    :param grid: The grid to check
+    :return: The row and column of the first empty cell found
+    """
+    for i in range(9):
+        for j in range(9):
+            if grid[i][j] == 0:
+                return i, j
+
+    return None
