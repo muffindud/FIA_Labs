@@ -1,4 +1,6 @@
 from time import sleep
+from copy import deepcopy
+
 from src.utils import *
 
 
@@ -9,10 +11,12 @@ def solve_backtracking(grid: GridType, print_delay: float = 0.0) -> GridType:
     :param grid: The grid to solve
     :return: The solved grid
     """
-    if not check_grid(grid):
+    g = deepcopy(grid)
+
+    if not check_grid(g):
         raise ValueError("Invalid grid")
 
-    def solve(grid: GridType) -> bool:
+    def solve(g: GridType) -> bool:
         """Solve the grid using backtracking
 
         :param grid: The grid to solve
@@ -20,31 +24,31 @@ def solve_backtracking(grid: GridType, print_delay: float = 0.0) -> GridType:
         """
         for row in range(9):
             for col in range(9):
-                if grid[row][col] == 0:
+                if g[row][col] == 0:
                     for num in range(1, 10):
-                        grid[row][col] = num
+                        g[row][col] = num
 
                         if print_delay != 0.0:
                             print("\033[H\033[J")
-                            print(format_grid(grid))
+                            print(format_grid(g))
                             sleep(print_delay)
 
-                        if check_grid(grid):
-                            if solve(grid):
+                        if check_grid(g):
+                            if solve(g):
                                 return True
 
-                        grid[row][col] = 0
+                        g[row][col] = 0
 
                     return False
 
         return True
 
-    solve(grid)
+    solve(g)
 
     if print_delay != 0.0:
         print("\033[H\033[J")
 
-    return grid
+    return g
 
 
 # Task 3
@@ -54,10 +58,12 @@ def solve_backtracking_optimzed(grid: GridType, print_delay: float = 0.0) -> Gri
     :param grid: The grid to solve
     :return: The solved grid
     """
-    if not check_grid(grid):
+    g = deepcopy(grid)
+
+    if not check_grid(g):
         raise ValueError("Invalid grid")
 
-    def solve(grid: GridType) -> bool:
+    def solve(g: GridType) -> bool:
         """Solve the grid using backtracking
 
         :param grid: The grid to solve
@@ -65,7 +71,7 @@ def solve_backtracking_optimzed(grid: GridType, print_delay: float = 0.0) -> Gri
         """
         while True:
             # Task 2
-            rc = find_empty_cell(grid)
+            rc = find_empty_cell(g)
 
             if rc is None:
                 break
@@ -73,29 +79,29 @@ def solve_backtracking_optimzed(grid: GridType, print_delay: float = 0.0) -> Gri
             row, col = rc
 
             # Task 2
-            for num in get_valid_numbers(grid, row, col):
-                grid[row][col] = num
+            for num in get_valid_numbers(g, row, col):
+                g[row][col] = num
 
                 if print_delay != 0.0:
                     print("\033[H\033[J")
-                    print(format_grid(grid))
+                    print(format_grid(g))
                     sleep(print_delay)
 
-                if solve(grid):
+                if solve(g):
                     return True
 
-                grid[row][col] = 0
+                g[row][col] = 0
 
             return False
 
         return True
 
-    solve(grid)
+    solve(g)
 
     if print_delay != 0.0:
         print("\033[H\033[J")
 
-    return grid
+    return g
 
 
 def single_cell_complete(grid: GridType, print_delay: float = 0.0) -> GridType:
@@ -104,65 +110,72 @@ def single_cell_complete(grid: GridType, print_delay: float = 0.0) -> GridType:
     :param grid: The grid to solve
     :return: The solved grid
     """
-    if not check_grid(grid):
+
+    g = deepcopy(grid)
+
+    if not check_grid(g):
         raise ValueError("Invalid grid")
 
     changed = True
     while changed:
         changed = False
-        for (row, column), num in get_single_possibilities(grid).items():
+        for (row, column), num in get_single_possibilities(g).items():
             changed = True
-            grid[row][column] = num
+            g[row][column] = num
 
             if print_delay != 0.0:
                 print("\033[H\033[J")
-                print(format_grid(grid))
+                print(format_grid(g))
                 sleep(print_delay)
 
-    solve_backtracking_optimzed(grid, print_delay)
+    solve_backtracking_optimzed(g, print_delay)
 
     if print_delay != 0.0:
         print("\033[H\033[J")
 
-    return grid
+    return g
 
 
+# Task 4
 def heuristic_solve(grid: GridType, print_delay: float = 0.0) -> GridType:
     """Solve a Sudoku grid using a heuristic approach
 
     :param grid: The grid to solve
     :return: The solved grid
     """
-    if not check_grid(grid):
+
+    g = deepcopy(grid)
+
+    if not check_grid(g):
         raise ValueError("Invalid grid")
 
-    def solve(grid: GridType) -> bool:
+    def solve(g: GridType) -> bool:
         """Solve the grid using a heuristic approach
 
         :param grid: The grid to solve
         :return: True if the grid is solved, False otherwise
         """
-        for (row, column), nums in get_min_possibilities(grid).items():
+        for (row, column), nums in get_min_possibilities(g).items():
             for num in nums:
-                grid[row][column] = num
+                g[row][column] = num
 
                 if print_delay != 0.0:
                     print("\033[H\033[J")
-                    print(format_grid(grid))
+                    print(format_grid(g))
                     sleep(print_delay)
 
-                if solve(grid):
+                if solve(g):
                     return True
 
-                grid[row][column] = 0
+                g[row][column] = 0
 
             return False
 
         return True
 
-    solve(grid)
+    solve(g)
 
     if print_delay != 0.0:
         print("\033[H\033[J")
 
-    return grid
+    return g
