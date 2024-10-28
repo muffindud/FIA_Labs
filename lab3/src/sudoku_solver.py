@@ -119,6 +119,49 @@ def single_cell_complete(grid: GridType, print_delay: float = 0.0) -> GridType:
                 print(format_grid(grid))
                 sleep(print_delay)
 
+    solve_backtracking_optimzed(grid, print_delay)
+
+    if print_delay != 0.0:
+        print("\033[H\033[J")
+
+    return grid
+
+
+def heuristic_solve(grid: GridType, print_delay: float = 0.0) -> GridType:
+    """Solve a Sudoku grid using a heuristic approach
+
+    :param grid: The grid to solve
+    :return: The solved grid
+    """
+    if not check_grid(grid):
+        raise ValueError("Invalid grid")
+
+    def solve(grid: GridType) -> bool:
+        """Solve the grid using a heuristic approach
+
+        :param grid: The grid to solve
+        :return: True if the grid is solved, False otherwise
+        """
+        for (row, column), nums in get_min_possibilities(grid).items():
+            for num in nums:
+                grid[row][column] = num
+
+                if print_delay != 0.0:
+                    print("\033[H\033[J")
+                    print(format_grid(grid))
+                    sleep(print_delay)
+
+                if solve(grid):
+                    return True
+
+                grid[row][column] = 0
+
+            return False
+
+        return True
+
+    solve(grid)
+
     if print_delay != 0.0:
         print("\033[H\033[J")
 

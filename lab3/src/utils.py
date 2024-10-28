@@ -172,6 +172,23 @@ def get_single_possibilities(grid: GridType) -> dict[tuple[int, int], int]:
     return single_possibilities
 
 
+def get_min_possibilities(grid: GridType) -> dict[tuple[int, int], list[int]]:
+    """Get cells with the minimum number of possible numbers
+
+    :param grid: The grid to check
+    :return: A dictionary of cells with the minimum number of possible numbers
+    """
+    min_possibilities = {}
+    min_valid_numbers = 9
+    for row, column in get_empty_cells(grid):
+        valid_numbers = get_valid_numbers(grid, row, column)
+        if len(valid_numbers) < min_valid_numbers:
+            min_valid_numbers = len(valid_numbers)
+            min_possibilities = {(row, column): valid_numbers}
+
+    return min_possibilities
+
+
 # Task 5
 def generate_grid(starting_cells: int = 33) -> GridType:
     """Generate a random Sudoku grid
@@ -203,3 +220,5 @@ def generate_grid(starting_cells: int = 33) -> GridType:
         grid[row][column] = 0
 
     return grid
+
+
