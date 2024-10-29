@@ -11,6 +11,7 @@ SAVE_LAST_GRID = True
 UNOPTIMIZED_SOLVE = False
 OPTIMIZED_SOLVE = False
 HEURISTIC_SOLVE = True
+AC3_SOLVE = False
 
 
 def main():
@@ -58,6 +59,16 @@ def main():
             print(format_grid(solved_grid_hs))
             print(f"Heuristic solve took {end_hs - start_hs:.2f} seconds")
 
+    if AC3_SOLVE:
+        start_ac3 = time()
+        solved_grid_ac3 = ac3_solve(grid, PRINT_DELAY)
+        end_ac3 = time()
+
+        if PRINT_DELAY == 0.0:
+            print("AC3 solve:")
+            print(format_grid(solved_grid_ac3))
+            print(f"AC3 solve took {end_ac3 - start_ac3:.2f} seconds")
+
     if PRINT_DELAY != 0.0:
         print("Original grid:")
         print(format_grid(grid))
@@ -76,6 +87,11 @@ def main():
             print("Heuristic solve:")
             print(format_grid(solved_grid_hs))
             print(f"Heuristic solve took {end_hs - start_hs:.2f} seconds")
+
+        if AC3_SOLVE:
+            print("AC3 solve:")
+            print(format_grid(solved_grid_ac3))
+            print(f"AC3 solve took {end_ac3 - start_ac3:.2f} seconds")
 
 
 if __name__ == "__main__":
