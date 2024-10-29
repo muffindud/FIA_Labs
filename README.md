@@ -6,7 +6,7 @@
 ## Laboratory works:
 1. [Laboratory Work No. 1](./lab1/)
 2. [Laboratory Work No. 2](./lab2/)
-<!-- 3. [Laboratory Work No. 3]() -->
+3. [Laboratory Work No. 3](./lab3/)
 <!-- 4. [Laboratory Work No. 4]() -->
 <!-- 5. [Laboratory Work No. 5]() -->
 <!-- 6. [Laboratory Work No. 6]() -->
