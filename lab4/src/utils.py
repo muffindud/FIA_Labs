@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from sklearn.preprocessing import LabelEncoder
 
 
 def get_unique_years(data: pd.DataFrame) -> list:
@@ -20,8 +21,11 @@ def get_correlation_matrix(data: pd.DataFrame) -> pd.DataFrame:
     :return: A list of lists, where each list represents the correlation between the columns of the data.
     """
 
-    data = data.apply(pd.to_numeric, errors="coerce")
+    le = LabelEncoder()
+    le.fit(data["JobTitle"])
+    data["JobTitle"] = le.transform(data["JobTitle"])
 
+    data = data.apply(pd.to_numeric, errors="coerce")
     correlation_matrix = data.corr()
     correlation_matrix = correlation_matrix.dropna(axis=0, how="all")
     correlation_matrix = correlation_matrix.dropna(axis=1, how="all")
