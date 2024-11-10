@@ -35,4 +35,6 @@ def clean_data(data: pd.DataFrame) -> pd.DataFrame:
     for i in range(len(data)):
         data.loc[i, "JobTitle"] = data.loc[i, "JobTitle"].upper()
 
+    data = data[data["EmployeeName"] != "Not provided"]
+
     return data
