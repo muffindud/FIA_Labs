@@ -6,8 +6,9 @@ import seaborn as sns
 from src.utils import *
 
 
-GENERATE_CORRELATION_MATRIX = True
+GENERATE_CORRELATION_MATRIX = False
 GENERATE_SCATTER_PLOT = False
+GENERATE_REGRESSION_PLOT = True
 
 DATA_PATH = "data/cleaned_data.csv"
 try:
@@ -43,6 +44,14 @@ def main():
         plt.title("OverTime and BasePay")
         sns.scatterplot(data=data, x="BasePay", y="OvertimePay", alpha=0.5, s=10)
         plt.savefig("plots/overtime_vs_basepay.png", bbox_inches="tight", dpi=300)
+
+    if GENERATE_REGRESSION_PLOT:
+        plt.clf()
+        plt.title("Regression Plot: BasePay and Benefits")
+        sns.regplot(data=data, x="BasePay", y="Benefits", scatter_kws={"alpha": 0.5, "s": 10}, line_kws={"color": "red"})
+        plt.xlabel("BasePay")
+        plt.ylabel("Benefits")
+        plt.savefig("plots/regression_basepay_vs_benefits.png", bbox_inches="tight", dpi=300)
 
 if __name__ == "__main__":
     main()
