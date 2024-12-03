@@ -8,18 +8,17 @@ from utils import generate_answer
 config = dotenv_values(".env")
 
 async def respond(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    user_message = update.message.text
-
     try:
+        user_message = update.message.text
         response = generate_answer(user_message)
+
+        print(f"{update.message.from_user.username}: {user_message}")
+        print(f"Response: {response}")
+
+        await update.message.reply_text(response)
     except Exception as e:
         print(e)
-        response = "Sorry, I don't know."
-
-    print(f"{update.message.from_user.username}: {user_message}")
-    print(f"Response: {response}")
-
-    await update.message.reply_text(response)
+        await update.message.reply_text("Sorry, I don't know.")
 
 
 app = ApplicationBuilder().token(config['TELEGRAM_TOKEN']).build()
