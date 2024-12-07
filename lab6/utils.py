@@ -29,7 +29,7 @@ def generate_answer(question: str) -> str:
     if decoded == '':
         return "Sorry, I don't know the answer to that question."
 
-    if decoded[-1] != '.':
+    if decoded[-1].isalnum():
         decoded += '.'
 
     return decoded
