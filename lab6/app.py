@@ -1,10 +1,11 @@
 from telegram import Update
 from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler, MessageHandler
 from dotenv import dotenv_values
+from warnings import filterwarnings
 
 from utils import generate_answer
 
-
+filterwarnings("ignore")
 config = dotenv_values(".env")
 
 async def respond(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:

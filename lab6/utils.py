@@ -2,21 +2,34 @@ import torch
 import torch.nn as nn
 from transformers import AutoTokenizer, T5ForConditionalGeneration
 
-tokenizer = AutoTokenizer.from_pretrained("t5-small")
+MODEL = 't5-base'
+TRAINED_MODEL = 'model10base.pth'
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+tokenizer = AutoTokenizer.from_pretrained(MODEL)
 
 class Seq2SeqModel(nn.Module):
-    def __init__(self, model_name="t5-small"):
+    def __init__(self, model_name=MODEL):
         super(Seq2SeqModel, self).__init__()
         self.model = T5ForConditionalGeneration.from_pretrained(model_name)
 
     def forward(self, input_ids, attention_mask, labels):
         return self.model(input_ids=input_ids, attention_mask=attention_mask, labels=labels)
 
-model = Seq2SeqModel()
-model.load_state_dict(torch.load('models/model20.pth'))
+model = Seq2SeqModel().to(device)
+model.load_state_dict(torch.load(f'models/{TRAINED_MODEL}'))
 
-def generate_answer(question):
+def generate_answer(question, model, tokenizer):
     model.eval()
-    input_ids = tokenizer(question, return_tensors="pt").input_ids
+    input_ids = tokenizer(question, return_tensors="pt").input_ids.to(device)
     output = model.model.generate(input_ids)
-    return tokenizer.decode(output[0], skip_special_tokens=True)
+
+    decoded = tokenizer.decode(output[0], skip_special_tokens=True)
+
+    if decoded == '':
+        return "Sorry, I don't know the answer to that question."
+
+    if decoded[-1] != '.':
+        decoded += '.'
+
+    return decoded
