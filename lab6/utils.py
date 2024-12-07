@@ -19,7 +19,7 @@ class Seq2SeqModel(nn.Module):
 model = Seq2SeqModel().to(device)
 model.load_state_dict(torch.load(f'models/{TRAINED_MODEL}'))
 
-def generate_answer(question, model, tokenizer):
+def generate_answer(question: str) -> str:
     model.eval()
     input_ids = tokenizer(question, return_tensors="pt").input_ids.to(device)
     output = model.model.generate(input_ids)
