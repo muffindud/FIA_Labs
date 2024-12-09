@@ -19,9 +19,21 @@ class Seq2SeqModel(nn.Module):
 model = Seq2SeqModel().to(device)
 model.load_state_dict(torch.load(f'models/{TRAINED_MODEL}'))
 
+def check_tokens(tokens):
+    saved_tokens = torch.load('models/used_tokens.pt')['input_ids']
+    return all([t in saved_tokens for t in tokens])
+
 def generate_answer(question: str) -> str:
     model.eval()
     input_ids = tokenizer(question, return_tensors="pt").input_ids.to(device)
+
+    if not check_tokens(input_ids[0]):
+        unknown_words = []
+        for token in input_ids[0]:
+            if not check_tokens([token]):
+                unknown_words.append(tokenizer.decode(token))
+        return f"Sorry, I don't know the answer to the question. I don't know the meaning of the word(s): {', '.join(unknown_words)}."
+
     output = model.model.generate(input_ids)
 
     decoded = tokenizer.decode(output[0], skip_special_tokens=True)
