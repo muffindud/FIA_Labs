@@ -27,9 +27,18 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 async def respond(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     try:
         user_message = update.message.text
-        response = generate_answer(user_message)
-
         print(f"{update.message.from_user.username}: {user_message}")
+
+        user_messages = []
+        splits = user_message.split("?")
+        for split in splits:
+            if split != "":
+                user_messages.append(split.strip()[0].capitalize() + split.strip()[1:] + "?")
+
+        response = ""
+        for user_message in user_messages:
+            response += generate_answer(user_message) + " "
+
         print(f"Response: {response}")
 
         await update.message.reply_text(response)
